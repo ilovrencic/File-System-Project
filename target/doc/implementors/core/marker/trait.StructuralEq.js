@@ -1,5 +1,0 @@
-(function() {var implementors = {};
-implementors["byteorder"] = [{"text":"impl StructuralEq for BigEndian","synthetic":false,"types":[]},{"text":"impl StructuralEq for LittleEndian","synthetic":false,"types":[]}];
-implementors["cplfs_api"] = [{"text":"impl StructuralEq for DiskState","synthetic":false,"types":[]},{"text":"impl StructuralEq for Buffer","synthetic":false,"types":[]},{"text":"impl StructuralEq for Block","synthetic":false,"types":[]},{"text":"impl StructuralEq for SuperBlock","synthetic":false,"types":[]},{"text":"impl StructuralEq for FType","synthetic":false,"types":[]},{"text":"impl StructuralEq for DInode","synthetic":false,"types":[]},{"text":"impl StructuralEq for Inode","synthetic":false,"types":[]},{"text":"impl StructuralEq for DirEntry","synthetic":false,"types":[]}];
-implementors["proc_macro2"] = [{"text":"impl StructuralEq for Delimiter","synthetic":false,"types":[]},{"text":"impl StructuralEq for Spacing","synthetic":false,"types":[]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
