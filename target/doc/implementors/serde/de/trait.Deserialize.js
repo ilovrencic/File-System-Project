@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["cplfs_api"] = [{"text":"impl&lt;'de&gt; Deserialize&lt;'de&gt; for SuperBlock","synthetic":false,"types":[]},{"text":"impl&lt;'de&gt; Deserialize&lt;'de&gt; for FType","synthetic":false,"types":[]},{"text":"impl&lt;'de&gt; Deserialize&lt;'de&gt; for DInode","synthetic":false,"types":[]},{"text":"impl&lt;'de&gt; Deserialize&lt;'de&gt; for DirEntry","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

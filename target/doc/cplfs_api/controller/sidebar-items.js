@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["DiskState","Small enum, used to specify whether we expect to open a new file system"]],"struct":[["Device","Struct representing the state of a hard drive disk (HDD). The implementation of this structure is the controller that allows us to read disk blocks from the disk, and write disk blocks to the disk."]]});

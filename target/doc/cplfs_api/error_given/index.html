@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `error_given` mod in crate `cplfs_api`."><meta name="keywords" content="rust, rustlang, rust-lang, error_given"><title>cplfs_api::error_given - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../cplfs_api/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><p class='location'>Module error_given</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#enums">Enums</a></li><li><a href="#types">Type Definitions</a></li></ul></div><p class='location'><a href='../index.html'>cplfs_api</a></p><script>window.sidebarCurrent = {name: 'error_given', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../src/cplfs_api/error_given.rs.html#1-105' title='goto source code'>[src]</a></span><span class='in-band'>Module <a href='../index.html'>cplfs_api</a>::<wbr><a class="mod" href=''>error_given</a></span></h1><div class='docblock'><p>The errors I used in the given code. You can use this file as an inspiration to write down your own error types.</p>
+<p>Read up on error handling in Rust using the <a href="https://doc.rust-lang.org/std/error/trait.Error.html"><code>error::Error</code></a> trait if you haven't already.
+The below also contains a quick summary.</p>
+<p>You can define your own enum with different types of errors your filesystem
+can return. Many functions of this trait will return a
+<code>Result&lt;(), Self::Error&gt;</code>: either an <code>Ok(())</code>, meaning that everything
+went ok, or an <code>Err(err)</code> where <code>err</code> is of this <code>Error</code> type, meaning
+that an error occurred.</p>
+<p>Note the two “supertraits” any error type must implement:</p>
+<ul>
+<li><code>Debug</code>: a <code>toString</code>-like method for debugging that can be derived
+automatically using <code>#[derive(Debug, ...)]</code>.</li>
+<li><code>Display</code>: a <code>toString</code>-like method that will be used to show error
+to users (as opposed to developers). This method has to be manually
+implemented.</li>
+</ul>
+<p>A first option when implementing errors, is to first define an <code>Enum</code> and then implement all necessary traits manually.
+This might look as follows:</p>
+<h1 id="example-boilerplate-implementation" class="section-header"><a href="#example-boilerplate-implementation">Example: boilerplate implementation</a></h1>
+<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+<span class="doccomment">/// Error type for my window manager</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>  <span class="comment">// Implement `Debug` automatically</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">APIError</span> {
+    <span class="doccomment">/// The input provided to some method in the controller layer was invalid</span>
+    <span class="ident">ControllerInvalidInput</span>(<span class="ident">String</span>),
+    <span class="comment">// Add more</span>
+    ...
+}
+<span class="comment">// Manually implement the `Display` trait.</span>
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
+<span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">APIError</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+        <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
+            <span class="ident">APIError</span>::<span class="ident">ControllerInvalidInput</span>(<span class="kw-2">ref</span> <span class="ident">s</span>) <span class="op">=&gt;</span>
+                <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;Invalid controller input: {}&quot;</span>, <span class="ident">s</span>),
+            ...
+        }
+    }
+}
+<span class="comment">// Now implement the `Error` trait.</span>
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">error</span>;
+<span class="kw">impl</span> <span class="ident">error</span>::<span class="ident">Error</span> <span class="kw">for</span> <span class="ident">APIError</span> {
+    <span class="comment">//Currently requires no implementation, and will grab the messages from the Display trait</span>
+    <span class="comment">//However, requires more boilerplate code in case we want to wrap errors in other errors and construct a type of backtrace</span>
+    <span class="comment">//In this case, we will have to override the `source` method here (which is what we will implicitly do below)</span>
+}</pre></div>
+<h1 id="example-avoiding-error-boilerplate-code" class="section-header"><a href="#example-avoiding-error-boilerplate-code">Example: avoiding error boilerplate code</a></h1>
+<p>Rather than following the basic template outlined in the documentation, and implementing the <code>Display</code> and <code>Error</code> traits manually for our error <code>Enum</code> as above, we make use of the auxiliary package <a href="https://docs.rs/thiserror/1.0.21/thiserror/"><code>thiserror</code></a>
+This package allows us to avoid a lot of the error-related boilerplate code by providing annotations to wrap errors and denote error sources.
+If each enum variant is annotated with an error-tag, it also allows the <code>Display</code> trait to be derived automatically.
+Error tags support full formatting syntax, and have handy provisions to reference fields of structs.
+Take a look at the example I wrote down below, and consult the package documentation if you need more details or other variants.</p>
+<p>If you do not understand this approach very well, you are free <em>not</em> to use the thiserror package, and manually embed my errors into yours, or explicitly handle and map them.</p>
+<h1 id="writing-your-own-error-types" class="section-header"><a href="#writing-your-own-error-types">Writing your own error types</a></h1>
+<p>Say you now want to implement your own error type, let's call it <code>MyError</code>, and use it as the associated error type in the implementation of the api traits in this assignment.
+You then have the option of embedding the below error type, allowing for easy interoperability using the <code>?</code> operator, by adding e.g. the following variant to your custom error type ;</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+<span class="attribute">#[<span class="ident">error</span>(<span class="op">&lt;</span><span class="ident">some_format_string_here</span><span class="op">&gt;</span>)]</span>
+ <span class="ident">GivenError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">error_given</span>::<span class="ident">APIError</span>,...)</pre></div>
+</div><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table><tr class='module-item'><td><a class="enum" href="enum.APIError.html" title='cplfs_api::error_given::APIError enum'>APIError</a></td><td class='docblock-short'><p>Error type used in the provided code
+(See the code to understand the following explanation, and compare the code to what is output in the documentation)
+The <code>#[error]</code> tag effectively takes care of the <code>Display</code> aspect of your errors, generating specific cases in the implicitly derived implementation of the <code>Display</code> trait.
+The <code>#[from]</code> tag allows us to wrap a different type error in this error. This automatically generates a <code>From</code>-trait implementation, allowing conversion from <code>io::Error</code>s to <code>ControllerIO</code>-errors when using the <code>?</code> operator, as you can see in the code of e.g. <a href="../controller.html"><code>controller.rs</code></a></p>
+</td></tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table><tr class='module-item'><td><a class="type" href="type.Result.html" title='cplfs_api::error_given::Result type'>Result</a></td><td class='docblock-short'><p>Define a generic alias for a <code>Result</code> with the error type <code>APIError</code>.
+This shorthand is what I use in my implementation to define error types</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "cplfs_api";</script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

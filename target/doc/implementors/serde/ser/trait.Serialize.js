@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["cplfs_api"] = [{"text":"impl Serialize for SuperBlock","synthetic":false,"types":[]},{"text":"impl Serialize for FType","synthetic":false,"types":[]},{"text":"impl Serialize for DInode","synthetic":false,"types":[]},{"text":"impl Serialize for DirEntry","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
